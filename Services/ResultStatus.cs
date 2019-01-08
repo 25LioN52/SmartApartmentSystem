@@ -2,7 +2,9 @@
 {
     public enum ResultStatus
     {
-        Success,
-        Failed
+        Success = 200,
+        Failed = 500,
+        NotChanged = 304,
+        NotFound = 404
     }
 }

@@ -2,6 +2,6 @@
 {
     public enum ModuleTypeEnum
     {
-        TempModule
+        Boiler
     }
 }
