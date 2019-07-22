@@ -54,7 +54,7 @@ namespace Commands
             {
                 var myDevice = Pi.I2C.AddDevice(module.DeviceId);
 
-                await myDevice.WriteAsync(new[] { module.Id, request.Status });
+                myDevice.Write(new[] { module.Id, request.Status });
 
                 module.ExpectedStatus = request.Status;
             }

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="6.0.0" />
-    <PackageReference Include="Unosquare.Raspberry.IO" Version="0.17.2" />
+    <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="Unosquare.Raspberry.IO" Version="0.23.0" />
   </ItemGroup>
 
   <ItemGroup>
