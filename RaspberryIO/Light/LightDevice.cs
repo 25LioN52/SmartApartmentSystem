@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Device.I2c;
 using System.Threading;
 
-namespace RaspberryIO.LightAndTemperature
+namespace RaspberryIO.Light
 {
-    public class LightNTempDevice : IDisposable
+    public class LightDevice : IDisposable
     {
         /// <summary>
         /// MPR121 Default I2C Address.
         /// </summary>
         public static readonly byte DefaultI2cAddress = 0x5A;
 
-        private static readonly int CHANNELS_NUMBER = Enum.GetValues(typeof(Channels)).Length;
+        private static readonly int CHANNELS_NUMBER = Enum.GetValues(typeof(LightChannels)).Length;
 
         private I2cDevice _device;
         private Timer _timer;
@@ -59,19 +60,16 @@ namespace RaspberryIO.LightAndTemperature
         /// </summary>
         /// <param name="device">The i2c device.</param>
         /// <param name="periodRefresh">The period in milliseconds of refresing the channel statuses.</param>
-        /// <param name="configuration">The controller configuration.</param>
-        public LightNTempDevice(I2cDevice device, int periodRefresh = -1)
+        public LightDevice(I2cDevice device, int periodRefresh = -1)
         {
             _device = device;
             _timer = new Timer(RefreshChannelStatuses, this, Timeout.Infinite, Timeout.Infinite);
 
-            _statuses = new Dictionary<Channels, bool>();
-            foreach (Channels channel in Enum.GetValues(typeof(Channels)))
+            _statuses = new Dictionary<LightChannels, bool>();
+            foreach (LightChannels channel in Enum.GetValues(typeof(LightChannels)))
             {
                 _statuses.Add(channel, false);
             }
-
-            InitializeController(configuration);
 
             PeriodRefresh = periodRefresh;
         }
@@ -109,68 +107,17 @@ namespace RaspberryIO.LightAndTemperature
         /// Please use ReadChannelStatuses() if you need to read statuses of multiple channels.
         /// Using this method several times to read status for several channels can affect the performance.
         /// </remark>
-        public bool ReadChannelStatus(Channels channel)
+        public bool ReadChannelStatus(LightChannels channel)
         {
             RefreshChannelStatuses();
 
             return _statuses[channel];
         }
 
-        private static Mpr121Configuration GetDefaultConfiguration()
+        public void SetRegister(LightChannels channel, byte value)
         {
-            return new Mpr121Configuration()
-            {
-                MaxHalfDeltaRising = 0x01,
-                NoiseHalfDeltaRising = 0x01,
-                NoiseCountLimitRising = 0x00,
-                FilterDelayCountLimitRising = 0x00,
-                MaxHalfDeltaFalling = 0x01,
-                NoiseHalfDeltaFalling = 0x01,
-                NoiseCountLimitFalling = 0xFF,
-                FilterDelayCountLimitFalling = 0x01,
-                ElectrodeTouchThreshold = 0x0F,
-                ElectrodeReleaseThreshold = 0x0A,
-                ChargeDischargeTimeConfiguration = 0x04,
-                ElectrodeConfiguration = 0x0C
-            };
-        }
-
-        private void InitializeController(Mpr121Configuration configuration)
-        {
-            SetRegister(Registers.MHDR, configuration.MaxHalfDeltaRising);
-            SetRegister(Registers.NHDR, configuration.NoiseHalfDeltaRising);
-            SetRegister(Registers.NCLR, configuration.NoiseCountLimitRising);
-            SetRegister(Registers.FDLR, configuration.FilterDelayCountLimitRising);
-            SetRegister(Registers.MHDF, configuration.MaxHalfDeltaFalling);
-            SetRegister(Registers.NHDF, configuration.NoiseHalfDeltaFalling);
-            SetRegister(Registers.NCLF, configuration.NoiseCountLimitFalling);
-            SetRegister(Registers.FDLF, configuration.FilterDelayCountLimitFalling);
-            SetRegister(Registers.E0TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E0RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E1TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E1RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E2TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E2RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E3TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E3RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E4TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E4RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E5TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E5RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E6TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E6RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E7TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E7RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E8TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E8RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E9TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E9RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E10TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E10RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.E11TTH, configuration.ElectrodeTouchThreshold);
-            SetRegister(Registers.E11RTH, configuration.ElectrodeReleaseThreshold);
-            SetRegister(Registers.CDTC, configuration.ChargeDischargeTimeConfiguration);
-            SetRegister(Registers.ELECONF, configuration.ElectrodeConfiguration);
+            Span<byte> data = stackalloc byte[] { (byte)channel, value };
+            _device.Write(data);
         }
 
         /// <summary>
@@ -198,9 +145,9 @@ namespace RaspberryIO.LightAndTemperature
             for (var i = 0; i < CHANNELS_NUMBER; i++)
             {
                 bool status = ((1 << i) & rawStatus) > 0;
-                if (_statuses[(Channels)i] != status)
+                if (_statuses[(LightChannels)i] != status)
                 {
-                    _statuses[(Channels)i] = status;
+                    _statuses[(LightChannels)i] = status;
                     isStatusChanged = true;
                 }
             }
@@ -212,12 +159,6 @@ namespace RaspberryIO.LightAndTemperature
 
             // Resume the auto-refresh.
             PeriodRefresh = periodRefresh;
-        }
-
-        private void SetRegister(Registers register, byte value)
-        {
-            Span<byte> data = stackalloc byte[] { (byte)register, value };
-            _device.Write(data);
         }
 
         private void OnChannelStatusesChanged()

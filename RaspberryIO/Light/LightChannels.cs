@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RaspberryIO.LightAndTemperature
+﻿namespace RaspberryIO.Light
 {
     public enum LightChannels
     {
