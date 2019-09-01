@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entity;
+using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -20,7 +21,7 @@ namespace RaspberryIO.Temperature
         private I2cDevice _device;
         private Timer _timer;
 
-        private readonly Dictionary<TempChannels, (bool status, byte temperature)> _statuses;
+        private readonly Dictionary<TempChannels, ModuleStatus> _statuses;
 
         private int _periodRefresh;
 
@@ -66,10 +67,10 @@ namespace RaspberryIO.Temperature
             _device = device;
             _timer = new Timer(RefreshChannelStatuses, this, Timeout.Infinite, Timeout.Infinite);
 
-            _statuses = new Dictionary<TempChannels, (bool status, byte temperature)>();
+            _statuses = new Dictionary<TempChannels, ModuleStatus>();
             foreach (TempChannels channel in Enum.GetValues(typeof(TempChannels)))
             {
-                _statuses.Add(channel, (false, 0));
+                _statuses.Add(channel, null);
             }
 
             PeriodRefresh = periodRefresh;
@@ -93,7 +94,7 @@ namespace RaspberryIO.Temperature
         /// <summary>
         /// Reads the channel statuses of MPR121 controller.
         /// </summary>
-        public IReadOnlyDictionary<TempChannels, (bool status, byte temperature)> ReadChannelStatuses()
+        public IReadOnlyDictionary<TempChannels, ModuleStatus> ReadChannelStatuses()
         {
             RefreshChannelStatuses();
 
@@ -108,7 +109,7 @@ namespace RaspberryIO.Temperature
         /// Please use ReadChannelStatuses() if you need to read statuses of multiple channels.
         /// Using this method several times to read status for several channels can affect the performance.
         /// </remark>
-        public (bool status, byte temperature) ReadChannelStatus(TempChannels channel)
+        public ModuleStatus ReadChannelStatus(TempChannels channel)
         {
             RefreshChannelStatuses();
 
@@ -138,20 +139,27 @@ namespace RaspberryIO.Temperature
             var periodRefresh = PeriodRefresh;
             PeriodRefresh = 0;
 
-            Span<byte> buffer = stackalloc byte[2];
+            Span<byte> buffer = stackalloc byte[CHANNELS_NUMBER * 2];
             _device.Read(buffer);
 
-            short rawStatus = BinaryPrimitives.ReadInt16LittleEndian(buffer);
             bool isStatusChanged = false;
-            //for (var i = 0; i < CHANNELS_NUMBER; i++)
-            //{
-            //    bool status = ((1 << i) & rawStatus) > 0;
-            //    if (_statuses[(TempChannels)i] != status)
-            //    {
-            //        _statuses[(TempChannels)i] = status;
-            //        isStatusChanged = true;
-            //    }
-            //}
+            for (var i = 0; i < CHANNELS_NUMBER; i++)
+            {
+                short rawStatus = BinaryPrimitives.ReadInt16LittleEndian(buffer.Slice(i * 2, 2));
+
+                var newStatus = new ModuleStatus
+                {
+                    IsDisabled = (rawStatus & 1) > 0,
+                    IsActive = ((rawStatus >> 1) & 1) > 0,
+                    ActualStatus = (byte)((rawStatus >> 2) & 0x3F),
+                    ExpectedStatus = (byte)((rawStatus >> 8) & 0x3F)
+                };
+                if (_statuses[(TempChannels)i] != newStatus)
+                {
+                    _statuses[(TempChannels)i] = newStatus;
+                    isStatusChanged = true;
+                }
+            }
 
             if (isStatusChanged)
             {

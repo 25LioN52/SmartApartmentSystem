@@ -21,10 +21,8 @@ namespace Queries
         {
             var module = await _context.Modules.Where(m => m.Id == request.Id).Select(m => new ModuleStatus
             {
-                Id = m.Id,
                 IsActive = m.IsActive,
                 ActualStatus = m.ActualStatus,
-                Name = m.Name,
                 ExpectedStatus = m.ExpectedStatus,
                 IsDisabled = m.IsDisabled
             }).FirstOrDefaultAsync(cancellationToken: cancellationToken);

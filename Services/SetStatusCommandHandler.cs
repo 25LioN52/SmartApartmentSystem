@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Data;
 using Data.Extensions;
@@ -7,7 +6,6 @@ using Data.Models;
 using Domain.Entity.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Unosquare.RaspberryIO;
 
 namespace Commands
 {
@@ -52,11 +50,11 @@ namespace Commands
             }
             else
             {
-                var myDevice = Pi.I2C.AddDevice(module.DeviceId);
+                //var myDevice = Pi.I2C.AddDevice(module.DeviceId);
 
-                myDevice.Write(new[] { module.Id, request.Status });
+                //myDevice.Write(new[] { module.Id, request.Status });
 
-                module.ExpectedStatus = request.Status;
+                //module.ExpectedStatus = request.Status;
             }
 
             await _context.SaveChangesAsync(cancellationToken);

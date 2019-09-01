@@ -6,8 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
-    <PackageReference Include="System.Device.Gpio" Version="0.1.0-prerelease.19376.1" />
-    <PackageReference Include="Unosquare.Raspberry.IO" Version="0.23.0" />
+    <PackageReference Include="System.Device.Gpio" Version="1.0.0-prerelease.19413.1" />
   </ItemGroup>
 
   <ItemGroup>
