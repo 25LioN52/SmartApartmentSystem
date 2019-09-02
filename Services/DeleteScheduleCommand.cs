@@ -10,6 +10,6 @@ namespace Commands
     public class DeleteScheduleCommand : IRequest<ResultStatus>
     {
         public ModuleTypeEnum Type { get; set; }
-        public Schedule Schedule { get; set; }
+        public ScheduleTime Schedule { get; set; }
     }
 }

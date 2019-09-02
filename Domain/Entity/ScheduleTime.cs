@@ -2,7 +2,7 @@
 
 namespace Domain.Entity
 {
-    public class Schedule
+    public class ScheduleTime
     {
         public DayOfWeek Day { get; set; }
         public byte Hour { get; set; }

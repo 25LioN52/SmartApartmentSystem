@@ -1,4 +1,7 @@
-﻿namespace SmartApartmentSystem
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+
+namespace SmartApartmentSystem
 {
     public class Program
     {

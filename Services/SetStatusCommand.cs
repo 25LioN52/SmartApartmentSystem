@@ -8,6 +8,6 @@ namespace Commands
     {
         public ModuleTypeEnum Type { get; set; }
         public byte Status { get; set; }
-        public Schedule Schedule { get; set; }
+        public ScheduleTime Schedule { get; set; }
     }
 }
