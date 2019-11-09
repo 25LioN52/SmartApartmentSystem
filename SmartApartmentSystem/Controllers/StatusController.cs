@@ -1,4 +1,11 @@
-﻿namespace SmartApartmentSystem.Controllers
+﻿using Domain.Entity;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Queries;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace SmartApartmentSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

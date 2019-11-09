@@ -1,4 +1,14 @@
-﻿namespace SmartApartmentSystem.Controllers
+﻿using Commands;
+using Domain.Entity;
+using Domain.Entity.Enums;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace SmartApartmentSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,7 +28,7 @@
         }
 
         [HttpPost("{value}")]
-        public async Task<IActionResult> UpdateTemperature([FromRoute] byte value, [FromBody] Schedule schedule)
+        public async Task<IActionResult> UpdateTemperature([FromRoute] byte value, [FromBody] ScheduleTime schedule)
         {
             var result = await _mediator.Send(new SetStatusCommand
             {
@@ -36,7 +46,7 @@
         {
             var result = await _mediator.Send(new DeleteScheduleCommand
             {
-                Schedule = new Schedule
+                Schedule = new ScheduleTime
                 {
                     Day = day,
                     Hour = hour,

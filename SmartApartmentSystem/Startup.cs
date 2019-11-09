@@ -1,4 +1,15 @@
-﻿namespace SmartApartmentSystem
+﻿using Commands;
+using Data;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Queries;
+using SmartApartmentSystem.Infrastructure;
+using System.Reflection;
+
+namespace SmartApartmentSystem
 {
     public class Startup
     {
@@ -19,14 +30,16 @@
             services.AddDbContext<SasDbContext>(options =>
                   options.UseSqlite("Data Source=SasDb.db"));
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-            });
+            services.AddHostedService<TimedHostedService>();
+
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
             //if (env.IsDevelopment())
@@ -42,46 +55,4 @@
             });
         }
     }
-
-
-
-    //internal class TimedHostedService : IHostedService, IDisposable
-    //{
-    //    private readonly ILogger _logger;
-    //    private Timer _timer;
-
-    //    public TimedHostedService(ILogger<TimedHostedService> logger)
-    //    {
-    //        _logger = logger;
-    //    }
-
-    //    public Task StartAsync(CancellationToken cancellationToken)
-    //    {
-    //        _logger.LogInformation("Timed Background Service is starting.");
-
-    //        _timer = new Timer(DoWork, null, TimeSpan.Zero,
-    //            TimeSpan.FromSeconds(5));
-
-    //        return Task.CompletedTask;
-    //    }
-
-    //    private void DoWork(object state)
-    //    {
-    //        _logger.LogInformation("Timed Background Service is working.");
-    //    }
-
-    //    public Task StopAsync(CancellationToken cancellationToken)
-    //    {
-    //        _logger.LogInformation("Timed Background Service is stopping.");
-
-    //        _timer?.Change(Timeout.Infinite, 0);
-
-    //        return Task.CompletedTask;
-    //    }
-
-    //    public void Dispose()
-    //    {
-    //        _timer?.Dispose();
-    //    }
-    //}
 }
