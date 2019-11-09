@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Domain.Entity;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RaspberryIO.Temperature
 {
@@ -9,13 +9,13 @@ namespace RaspberryIO.Temperature
         /// <summary>
         /// The channel statuses.
         /// </summary>
-        public IReadOnlyDictionary<TempChannels, (bool status, byte temperature)> ChannelStatuses { get; private set; }
+        public IReadOnlyDictionary<TempChannels, ModuleStatus> ChannelStatuses { get; private set; }
 
         /// <summary>
         /// Initialize event arguments.
         /// </summary>
         /// <param name="channelStatuses">The channel statuses.</param>
-        public ChannelStatusesChangedEventArgs(IReadOnlyDictionary<TempChannels, (bool status, byte temperature)> channelStatuses) : base()
+        public ChannelStatusesChangedEventArgs(IReadOnlyDictionary<TempChannels, ModuleStatus> channelStatuses) : base()
         {
             ChannelStatuses = channelStatuses;
         }

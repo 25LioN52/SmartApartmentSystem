@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Commands;
-using Domain.Entity;
-using Domain.Entity.Enums;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-namespace SmartApartmentSystem.Controllers
+﻿namespace SmartApartmentSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -24,7 +14,7 @@ namespace SmartApartmentSystem.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> GetTemperature()
         {
-            return new[] {"value1", "value2"};
+            return new[] { "value1", "value2" };
         }
 
         [HttpPost("{value}")]
@@ -37,7 +27,7 @@ namespace SmartApartmentSystem.Controllers
                 Type = ModuleTypeEnum.Boiler
             }, CancellationToken.None);
 
-            return StatusCode((int) result);
+            return StatusCode((int)result);
         }
 
         [HttpDelete("{day}/{hour}/{minutes}")]
@@ -55,7 +45,7 @@ namespace SmartApartmentSystem.Controllers
                 Type = ModuleTypeEnum.Boiler
             }, CancellationToken.None);
 
-            return StatusCode((int) result);
+            return StatusCode((int)result);
         }
     }
 }

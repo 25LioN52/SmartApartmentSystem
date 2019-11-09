@@ -1,11 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Domain.Entity;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Queries;
-
-namespace SmartApartmentSystem.Controllers
+﻿namespace SmartApartmentSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

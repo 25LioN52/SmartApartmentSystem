@@ -1,9 +1,4 @@
-﻿using Domain.Entity.Enums;
-using System;
-using System.Collections.Generic;
-using System.Device.I2c;
-using System.Text;
-using Unosquare.RaspberryIO;
+﻿
 
 namespace RaspberryIO
 {

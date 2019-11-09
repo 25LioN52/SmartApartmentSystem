@@ -23,10 +23,8 @@ namespace Queries
         {
             var modules = await _context.Modules.Select(m => new ModuleStatus
             {
-                Id = m.Id,
                 IsActive = m.IsActive,
                 ActualStatus = m.ActualStatus,
-                Name = m.Name,
                 ExpectedStatus = m.ExpectedStatus,
                 IsDisabled = m.IsDisabled
             }).ToArrayAsync(cancellationToken: cancellationToken);
