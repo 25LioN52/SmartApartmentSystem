@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Queries;
 using SmartApartmentSystem.Infrastructure;
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace SmartApartmentSystem
 {
@@ -32,17 +33,17 @@ namespace SmartApartmentSystem
 
             services.AddHostedService<TimedHostedService>();
 
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-            //});
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
-            //if (env.IsDevelopment())
+            //if (app.IsDevelopment())
             //{
             //    app.UseDeveloperExceptionPage();
             //}
