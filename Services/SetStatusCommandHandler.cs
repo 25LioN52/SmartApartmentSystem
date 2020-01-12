@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Data;
-using Data.Extensions;
-using Data.Models;
-using Domain.Entity.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SmartApartmentSystem.Data;
+using SmartApartmentSystem.Data.Extensions;
+using SmartApartmentSystem.Data.Models;
+using SmartApartmentSystem.Domain.Entity.Enums;
 
-namespace Commands
+namespace SmartApartmentSystem.Services
 {
     public class SetStatusCommandHandler : IRequestHandler<SetStatusCommand, ResultStatus>
     {

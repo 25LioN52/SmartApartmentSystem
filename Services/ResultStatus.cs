@@ -1,4 +1,4 @@
-﻿namespace Commands
+﻿namespace SmartApartmentSystem.Services
 {
     public enum ResultStatus
     {

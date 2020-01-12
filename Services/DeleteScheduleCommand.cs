@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Domain.Entity;
-using Domain.Entity.Enums;
-using MediatR;
+﻿using MediatR;
+using SmartApartmentSystem.Domain.Entity;
+using SmartApartmentSystem.Domain.Entity.Enums;
 
-namespace Commands
+namespace SmartApartmentSystem.Services
 {
     public class DeleteScheduleCommand : IRequest<ResultStatus>
     {

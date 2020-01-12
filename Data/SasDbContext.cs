@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Data.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartApartmentSystem.Data.Models;
 
-namespace Data
+namespace SmartApartmentSystem.Data
 {
     public sealed class SasDbContext : DbContext
     {

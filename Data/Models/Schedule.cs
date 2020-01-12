@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Data.Models
+﻿namespace SmartApartmentSystem.Data.Models
 {
     public class Schedule
     {

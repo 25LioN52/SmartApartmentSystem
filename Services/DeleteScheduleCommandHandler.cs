@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Data;
-using Data.Extensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using SmartApartmentSystem.Data;
+using SmartApartmentSystem.Data.Extensions;
 
-namespace Commands
+namespace SmartApartmentSystem.Services
 {
     public class DeleteScheduleCommandHandler : IRequestHandler<DeleteScheduleCommand, ResultStatus>
     {

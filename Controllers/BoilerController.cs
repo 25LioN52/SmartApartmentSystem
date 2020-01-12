@@ -1,12 +1,12 @@
-﻿using Commands;
-using Domain.Entity;
-using Domain.Entity.Enums;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SmartApartmentSystem.Domain.Entity;
+using SmartApartmentSystem.Domain.Entity.Enums;
+using SmartApartmentSystem.Services;
 
 namespace SmartApartmentSystem.Controllers
 {

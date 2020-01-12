@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Data;
-using Domain.Entity;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SmartApartmentSystem.Data;
+using SmartApartmentSystem.Domain.Entity;
 
-namespace Queries
+namespace SmartApartmentSystem.Queries
 {
     public class GetStatusQueryHandler : IRequestHandler<GetStatusQuery, IReadOnlyCollection<ModuleStatus>>
     {

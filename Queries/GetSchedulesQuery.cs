@@ -1,7 +1,7 @@
-﻿using Domain.Entity;
-using MediatR;
+﻿using MediatR;
+using SmartApartmentSystem.Domain.Entity;
 
-namespace Queries
+namespace SmartApartmentSystem.Queries
 {
     public class GetSchedulesQuery: IRequest<ScheduleTime>
     {

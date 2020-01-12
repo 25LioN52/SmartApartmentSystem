@@ -1,8 +1,8 @@
-﻿using Domain.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using SmartApartmentSystem.Domain.Entity;
 
-namespace RaspberryIO.Temperature
+namespace SmartApartmentSystem.RaspberryIO.Temperature
 {
     public class ChannelStatusesChangedEventArgs : EventArgs
     {

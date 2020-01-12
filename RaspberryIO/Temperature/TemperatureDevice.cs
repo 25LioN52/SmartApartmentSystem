@@ -1,13 +1,12 @@
-﻿using Domain.Entity;
-using System;
+﻿using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Device.I2c;
-using System.Text;
 using System.Threading;
+using SmartApartmentSystem.Domain.Entity;
 
-namespace RaspberryIO.Temperature
+namespace SmartApartmentSystem.RaspberryIO.Temperature
 {
     public class TemperatureDevice : IDisposable
     {

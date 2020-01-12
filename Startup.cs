@@ -1,14 +1,14 @@
-﻿using Commands;
-using Data;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Queries;
 using SmartApartmentSystem.Infrastructure;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using SmartApartmentSystem.Data;
+using SmartApartmentSystem.Queries;
+using SmartApartmentSystem.Services;
 
 namespace SmartApartmentSystem
 {

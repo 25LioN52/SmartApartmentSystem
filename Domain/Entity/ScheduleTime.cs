@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domain.Entity
+namespace SmartApartmentSystem.Domain.Entity
 {
     public class ScheduleTime
     {

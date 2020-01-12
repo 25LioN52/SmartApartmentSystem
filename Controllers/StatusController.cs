@@ -1,9 +1,9 @@
-﻿using Domain.Entity;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartApartmentSystem.Domain.Entity;
+using SmartApartmentSystem.Queries;
 
 namespace SmartApartmentSystem.Controllers
 {

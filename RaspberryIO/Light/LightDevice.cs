@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Device.I2c;
 using System.Threading;
 
-namespace RaspberryIO.Light
+namespace SmartApartmentSystem.RaspberryIO.Light
 {
     public class LightDevice : IDisposable
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Domain.Entity
+namespace SmartApartmentSystem.Domain.Entity
 {
     public class ModuleStatus
     {

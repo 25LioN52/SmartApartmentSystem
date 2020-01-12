@@ -1,4 +1,4 @@
-﻿namespace Domain.Entity.Enums
+﻿namespace SmartApartmentSystem.Domain.Entity.Enums
 {
     public enum ModuleTypeEnum
     {

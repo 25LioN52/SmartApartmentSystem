@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Domain.Entity;
 using MediatR;
+using SmartApartmentSystem.Domain.Entity;
 
-namespace Queries
+namespace SmartApartmentSystem.Queries
 {
     public class GetStatusQuery : IRequest<IReadOnlyCollection<ModuleStatus>>
     {

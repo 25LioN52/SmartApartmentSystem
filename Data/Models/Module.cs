@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Data.Models
+namespace SmartApartmentSystem.Data.Models
 {
     public class Module
     {

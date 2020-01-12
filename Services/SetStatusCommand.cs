@@ -1,8 +1,8 @@
-﻿using Domain.Entity;
-using Domain.Entity.Enums;
-using MediatR;
+﻿using MediatR;
+using SmartApartmentSystem.Domain.Entity;
+using SmartApartmentSystem.Domain.Entity.Enums;
 
-namespace Commands
+namespace SmartApartmentSystem.Services
 {
     public class SetStatusCommand : IRequest<ResultStatus>
     {

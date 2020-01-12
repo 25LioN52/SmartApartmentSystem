@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Data.Models;
 using Microsoft.EntityFrameworkCore;
+using SmartApartmentSystem.Data.Models;
 
-namespace Data.Extensions
+namespace SmartApartmentSystem.Data.Extensions
 {
     public static class ScheduleExtensions
     {

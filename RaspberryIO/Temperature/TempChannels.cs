@@ -1,4 +1,4 @@
-﻿namespace RaspberryIO.Temperature
+﻿namespace SmartApartmentSystem.RaspberryIO.Temperature
 {
     public enum TempChannels
     {

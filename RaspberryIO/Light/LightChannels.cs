@@ -1,4 +1,4 @@
-﻿namespace RaspberryIO.Light
+﻿namespace SmartApartmentSystem.RaspberryIO.Light
 {
     public enum LightChannels
     {

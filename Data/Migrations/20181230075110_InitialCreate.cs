@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Data.Migrations
+namespace SmartApartmentSystem.Data.Migrations
 {
     public partial class InitialCreate : Migration
     {

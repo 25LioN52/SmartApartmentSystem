@@ -1,23 +1,19 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim-arm64v8 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster-arm64v8 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
-COPY ["SmartApartmentSystem/SmartApartmentSystem.csproj", "SmartApartmentSystem/"]
-COPY ["Data/Data.csproj", "Data/"]
-COPY ["Queries/Queries.csproj", "Queries/"]
-COPY ["Domain/Domain.csproj", "Domain/"]
-COPY ["Services/Commands.csproj", "Services/"]
-RUN dotnet restore "SmartApartmentSystem/SmartApartmentSystem.csproj"
+COPY ["SmartApartmentSystem.csproj", ""]
+RUN dotnet restore "./SmartApartmentSystem.csproj"
 COPY . .
-WORKDIR "/src/SmartApartmentSystem"
-RUN dotnet build "SmartApartmentSystem.csproj" -c Release -o /app/build
+WORKDIR "/src/."
+RUN dotnet build "SmartApartmentSystem.csproj" -c Release -o /app/build  -r linux-arm
 
 FROM build AS publish
-RUN dotnet publish "SmartApartmentSystem.csproj" -c Release -o /app/publish
+RUN dotnet publish "SmartApartmentSystem.csproj" -c Release -o /app/publish  -r linux-arm
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim-arm32v7 AS runtime
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SmartApartmentSystem.dll"]
