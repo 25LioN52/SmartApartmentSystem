@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Device.I2c;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using System.Reflection;
 using Microsoft.OpenApi.Models;
 using SmartApartmentSystem.Data;
 using SmartApartmentSystem.Queries;
+using SmartApartmentSystem.RaspberryIO.Temperature;
 using SmartApartmentSystem.Services;
 
 namespace SmartApartmentSystem
@@ -37,6 +39,8 @@ namespace SmartApartmentSystem
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+
+            services.AddSingleton<TemperatureDevice>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,12 +51,15 @@ namespace SmartApartmentSystem
             //{
             //    app.UseDeveloperExceptionPage();
             //}
-
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V2"); });
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
         }
     }

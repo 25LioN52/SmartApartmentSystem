@@ -17,3 +17,7 @@ FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim-arm32v7 AS runtime
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SmartApartmentSystem.dll"]
+
+#docker build "E:\Repos\SmartApartmentSystem" -t 25lion52/sas:latest
+#docker push 25lion52/sas
+#docker run --privileged -p 8700:80 25lion52/sas

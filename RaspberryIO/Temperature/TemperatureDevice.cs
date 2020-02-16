@@ -38,7 +38,7 @@ namespace SmartApartmentSystem.RaspberryIO.Temperature
         /// </remark>
         public int PeriodRefresh
         {
-            get { return _periodRefresh; }
+            get => _periodRefresh;
 
             set
             {
@@ -57,13 +57,14 @@ namespace SmartApartmentSystem.RaspberryIO.Temperature
         }
 
         /// <summary>
-        /// Initialize a MPR121 controller.
+        /// Initialize a Temperature controller.
         /// </summary>
         /// <param name="device">The i2c device.</param>
         /// <param name="periodRefresh">The period in milliseconds of refresing the channel statuses.</param>
-        public TemperatureDevice(I2cDevice device, int periodRefresh = -1)
+        public TemperatureDevice(int periodRefresh = 1000)
         {
-            _device = device;
+            var settings = new I2cConnectionSettings(1, 0x10);
+            _device = I2cDevice.Create(settings);
             _timer = new Timer(RefreshChannelStatuses, this, Timeout.Infinite, Timeout.Infinite);
 
             _statuses = new Dictionary<TempChannels, ModuleStatus>();
