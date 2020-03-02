@@ -3,7 +3,6 @@
     public enum TempChannels
     {
         Boiler,
-        Condition,
         Floor
     }
 }

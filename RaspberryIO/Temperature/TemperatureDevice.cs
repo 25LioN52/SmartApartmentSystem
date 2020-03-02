@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Device.I2c;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using SmartApartmentSystem.Domain.Entity;
 
 namespace SmartApartmentSystem.RaspberryIO.Temperature
@@ -23,6 +24,8 @@ namespace SmartApartmentSystem.RaspberryIO.Temperature
         private readonly Dictionary<TempChannels, ModuleStatus> _statuses;
 
         private int _periodRefresh;
+
+        private readonly ILogger<TemperatureDevice> _logger;
 
         /// <summary>
         /// Notifies about a the channel statuses have been changed.
@@ -61,8 +64,10 @@ namespace SmartApartmentSystem.RaspberryIO.Temperature
         /// </summary>
         /// <param name="device">The i2c device.</param>
         /// <param name="periodRefresh">The period in milliseconds of refresing the channel statuses.</param>
-        public TemperatureDevice(int periodRefresh = 1000)
+        public TemperatureDevice(ILogger<TemperatureDevice> logger)
         {
+            _logger = logger;
+            _logger.LogInformation("Temperature init");
             var settings = new I2cConnectionSettings(1, 0x10);
             _device = I2cDevice.Create(settings);
             _timer = new Timer(RefreshChannelStatuses, this, Timeout.Infinite, Timeout.Infinite);
@@ -73,7 +78,7 @@ namespace SmartApartmentSystem.RaspberryIO.Temperature
                 _statuses.Add(channel, null);
             }
 
-            PeriodRefresh = periodRefresh;
+            PeriodRefresh = 10000;
         }
 
         public void Dispose()
@@ -135,35 +140,50 @@ namespace SmartApartmentSystem.RaspberryIO.Temperature
         /// </summary>
         private void RefreshChannelStatuses()
         {
+            _logger.LogInformation("Refresh status");
             // Pause the auto-refresh to prevent possible collisions.
             var periodRefresh = PeriodRefresh;
             PeriodRefresh = 0;
 
             Span<byte> buffer = stackalloc byte[CHANNELS_NUMBER * 2];
-            _device.Read(buffer);
-
-            bool isStatusChanged = false;
-            for (var i = 0; i < CHANNELS_NUMBER; i++)
+            try
             {
-                short rawStatus = BinaryPrimitives.ReadInt16LittleEndian(buffer.Slice(i * 2, 2));
+                _device.Read(buffer);
+                _logger.LogInformation("Read buffer");
 
-                var newStatus = new ModuleStatus
+                for (int i = 0; i < buffer.Length; i++)
                 {
-                    IsDisabled = (rawStatus & 1) > 0,
-                    IsActive = ((rawStatus >> 1) & 1) > 0,
-                    ActualStatus = (byte)((rawStatus >> 2) & 0x3F),
-                    ExpectedStatus = (byte)((rawStatus >> 8) & 0x3F)
-                };
-                if (_statuses[(TempChannels)i] != newStatus)
+                    _logger.LogInformation("{i} part {rawStatus}", i, buffer[i]);
+                }
+
+                var isStatusChanged = false;
+                for (var i = 0; i < CHANNELS_NUMBER; i++)
                 {
-                    _statuses[(TempChannels)i] = newStatus;
-                    isStatusChanged = true;
+                    ushort rawStatus = BinaryPrimitives.ReadUInt16BigEndian(buffer.Slice(i * 2, 2));
+                    _logger.LogInformation("{i} part {rawStatus} ushort", i, rawStatus);
+
+                    var newStatus = new ModuleStatus
+                    {
+                        IsDisabled = (rawStatus & 1) > 0,
+                        IsActive = ((rawStatus >> 1) & 1) > 0,
+                        ActualStatus = (byte)((rawStatus >> 2) & 0x3F),
+                        ExpectedStatus = (byte)((rawStatus >> 8) & 0x3F)
+                    };
+                    if (_statuses[(TempChannels)i] != newStatus)
+                    {
+                        _statuses[(TempChannels)i] = newStatus;
+                        isStatusChanged = true;
+                    }
+                }
+
+                if (isStatusChanged)
+                {
+                    OnChannelStatusesChanged();
                 }
             }
-
-            if (isStatusChanged)
+            catch (Exception e)
             {
-                OnChannelStatusesChanged();
+                Console.WriteLine(e);
             }
 
             // Resume the auto-refresh.

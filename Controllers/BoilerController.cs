@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SmartApartmentSystem.Domain.Entity;
 using SmartApartmentSystem.Domain.Entity.Enums;
+using SmartApartmentSystem.RaspberryIO.Temperature;
 using SmartApartmentSystem.Services;
 
 namespace SmartApartmentSystem.Controllers
@@ -15,16 +16,24 @@ namespace SmartApartmentSystem.Controllers
     public class BoilerController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<BoilerController> _logger;
 
-        public BoilerController(IMediator mediator)
+        public BoilerController(IMediator mediator, ILogger<BoilerController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> GetTemperature()
+        public async Task<ActionResult<ModuleStatus>> GetTemperature()
         {
-            return new[] { "value1", "value2" };
+            _logger.LogInformation("tratata");
+            var result = await _mediator.Send(new GetTempQuery
+            {
+                Type = TempChannels.Boiler
+            }, CancellationToken.None);
+
+            return result;
         }
 
         [HttpPost("{value}")]
