@@ -31,7 +31,7 @@ namespace SmartApartmentSystem.Services
 
         public Task<ResultStatus> Handle(SetStatusCommand request, CancellationToken cancellationToken)
         {
-            _temperature.SetRegister(TempChannels.Boiler, request.Status);
+            _temperature.SetRegister(request.Type == ModuleTypeEnum.Boiler ? TempChannels.Boiler : TempChannels.Floor, request.Status);
             /*
             var module = await _context.Modules.Include(m => m.Schedules)
                 .FirstOrDefaultAsync(m => m.Id == (int)ModuleTypeEnum.Boiler, cancellationToken: cancellationToken);

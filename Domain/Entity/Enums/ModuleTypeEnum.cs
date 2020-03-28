@@ -2,6 +2,7 @@
 {
     public enum ModuleTypeEnum
     {
-        Boiler
+        Boiler,
+        Floor
     }
 }

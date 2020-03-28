@@ -1,9 +1,11 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SmartApartmentSystem.Domain.Entity;
 using SmartApartmentSystem.Domain.Entity.Enums;
 using SmartApartmentSystem.RaspberryIO.Temperature;
@@ -13,25 +15,22 @@ namespace SmartApartmentSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BoilerController : ControllerBase
+    public class FloorController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<BoilerController> _logger;
 
-        public BoilerController(IMediator mediator, ILogger<BoilerController> logger)
+        public FloorController(IMediator mediator)
         {
             _mediator = mediator;
-            _logger = logger;
         }
-
         [HttpGet]
         public async Task<ActionResult<ModuleStatus>> GetTemperature()
         {
             var result = await _mediator.Send(new GetTempQuery
             {
-                Type = TempChannels.Boiler
+                Type = TempChannels.Floor
             }, CancellationToken.None);
-            
+
             return result;
         }
 
@@ -42,28 +41,10 @@ namespace SmartApartmentSystem.Controllers
             {
                 Status = value,
                 Schedule = schedule,
-                Type = ModuleTypeEnum.Boiler
+                Type = ModuleTypeEnum.Floor
             }, CancellationToken.None);
 
             return StatusCode((int)result);
         }
-
-        //[HttpDelete("{day}/{hour}/{minutes}")]
-        //public async Task<IActionResult> DeleteTemperature([FromRoute] DayOfWeek day, [FromRoute] byte hour,
-        //    [FromRoute] byte minutes)
-        //{
-        //    var result = await _mediator.Send(new DeleteScheduleCommand
-        //    {
-        //        Schedule = new ScheduleTime
-        //        {
-        //            Day = day,
-        //            Hour = hour,
-        //            Minutes = minutes
-        //        },
-        //        Type = ModuleTypeEnum.Boiler
-        //    }, CancellationToken.None);
-
-        //    return StatusCode((int)result);
-        //}
     }
 }

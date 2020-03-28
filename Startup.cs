@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using SmartApartmentSystem.Infrastructure;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
@@ -11,6 +12,8 @@ using SmartApartmentSystem.Data;
 using SmartApartmentSystem.Queries;
 using SmartApartmentSystem.RaspberryIO.Temperature;
 using SmartApartmentSystem.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace SmartApartmentSystem
 {
@@ -27,6 +30,7 @@ namespace SmartApartmentSystem
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            
             services.AddMediatR(typeof(DeleteScheduleCommand).GetTypeInfo().Assembly);
             services.AddMediatR(typeof(GetModuleStatusQuery).GetTypeInfo().Assembly);
 
@@ -41,16 +45,23 @@ namespace SmartApartmentSystem
             });
 
             services.AddSingleton<TemperatureDevice>();
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
             //if (app.IsDevelopment())
             //{
             //    app.UseDeveloperExceptionPage();
             //}
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
             app.UseSwagger();
 
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V2"); });
@@ -60,6 +71,18 @@ namespace SmartApartmentSystem
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+            });
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
             });
         }
     }

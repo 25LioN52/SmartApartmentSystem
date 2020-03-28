@@ -20,4 +20,4 @@ ENTRYPOINT ["dotnet", "SmartApartmentSystem.dll"]
 
 #docker build "E:\Repos\SmartApartmentSystem" -t 25lion52/sas:latest
 #docker push 25lion52/sas
-#docker run --privileged -p 8700:80 25lion52/sas
+#docker run --privileged --restart always -p 8700:80 25lion52/sas
