@@ -14,6 +14,7 @@ using SmartApartmentSystem.RaspberryIO.Temperature;
 using SmartApartmentSystem.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using SmartApartmentSystem.Scheduler;
 
 namespace SmartApartmentSystem
 {
@@ -45,6 +46,7 @@ namespace SmartApartmentSystem
             });
 
             services.AddSingleton<TemperatureDevice>();
+            services.AddSingleton<MainScheduler>();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -84,6 +86,9 @@ namespace SmartApartmentSystem
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            var serviceProvider = app.ApplicationServices;
+            serviceProvider.GetService<MainScheduler>();
         }
     }
 }

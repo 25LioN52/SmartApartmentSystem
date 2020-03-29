@@ -17,16 +17,16 @@ namespace SmartApartmentSystem.Services
 
         public async Task<ResultStatus> Handle(DeleteScheduleCommand request, CancellationToken cancellationToken)
         {
-            var schedule = await _context.Schedules.GetSchedule((int) request.Type, request.Schedule.Day,
-                request.Schedule.Hour, request.Schedule.Minutes);
+            //var schedule = await _context.Schedules.GetSchedule((int) request.Type, request.Schedule.Day,
+            //    request.Schedule.Hour, request.Schedule.Minutes);
 
-            if (schedule == null)
-            {
-                return ResultStatus.NotFound;
-            }
+            //if (schedule == null)
+            //{
+            //    return ResultStatus.NotFound;
+            //}
 
-            _context.Schedules.Remove(schedule);
-            await _context.SaveChangesAsync(cancellationToken);
+            //_context.Schedules.Remove(schedule);
+            //await _context.SaveChangesAsync(cancellationToken);
 
             return ResultStatus.Success;
         }

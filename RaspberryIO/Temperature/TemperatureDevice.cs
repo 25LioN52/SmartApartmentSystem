@@ -14,7 +14,7 @@ namespace SmartApartmentSystem.RaspberryIO.Temperature
         /// <summary>
         /// MPR121 Default I2C Address.
         /// </summary>
-        public static readonly byte DefaultI2cAddress = 0x5A;
+        public static readonly byte DefaultI2cAddress = 0x10;
 
         private static readonly int CHANNELS_NUMBER = Enum.GetValues(typeof(TempChannels)).Length;
 
