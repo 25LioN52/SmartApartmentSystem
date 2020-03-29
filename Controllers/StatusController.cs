@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,9 +20,9 @@ namespace SmartApartmentSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyCollection<ModuleStatus>>> GetStatuses()
+        public ActionResult<string> GetStatuses()
         {
-            var result = await _mediator.Send(new GetStatusQuery());
+            var result = $"{DateTime.Now.Hour} {DateTime.Now.Minute}";
 
             return Ok(result);
         }
