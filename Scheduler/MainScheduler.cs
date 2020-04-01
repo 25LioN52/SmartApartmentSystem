@@ -21,8 +21,8 @@ namespace SmartApartmentSystem.Scheduler
                 new StatusWithTime
                 {
                     Type = ModuleTypeEnum.Floor,
-                    Hour = 6,
-                    Minutes = 0,
+                    Hour = 7,
+                    Minutes = 30,
                     Status = 1
                 },
                 new StatusWithTime
@@ -36,6 +36,20 @@ namespace SmartApartmentSystem.Scheduler
                 {
                     Type = ModuleTypeEnum.Floor,
                     Hour = 18,
+                    Minutes = 0,
+                    Status = 1
+                },
+                new StatusWithTime
+                {
+                    Type = ModuleTypeEnum.Floor,
+                    Hour = 19,
+                    Minutes = 30,
+                    Status = 0
+                },
+                new StatusWithTime
+                {
+                    Type = ModuleTypeEnum.Floor,
+                    Hour = 21,
                     Minutes = 0,
                     Status = 1
                 },
