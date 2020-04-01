@@ -13,11 +13,10 @@ RUN dotnet build "SmartApartmentSystem.csproj" -c Release -o /app/build  -r linu
 FROM build AS publish
 RUN dotnet publish "SmartApartmentSystem.csproj" -c Release -o /app/publish  -r linux-arm
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim-arm32v7 AS runtime
-
 ENV TZ=Europe/Kiev
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > sudo /etc/timezone
 
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim-arm32v7 AS runtime
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SmartApartmentSystem.dll"]
