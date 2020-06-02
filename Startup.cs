@@ -36,7 +36,7 @@ namespace SmartApartmentSystem
             services.AddMediatR(typeof(GetModuleStatusQuery).GetTypeInfo().Assembly);
 
             services.AddDbContext<SasDbContext>(options =>
-                  options.UseSqlite("Data Source=SasDb.db"));
+                  options.UseSqlite(@"Data Source=dbfolder/SasDb.db"));
 
             services.AddHostedService<TimedHostedService>();
 
@@ -87,8 +87,9 @@ namespace SmartApartmentSystem
                 }
             });
 
-            var serviceProvider = app.ApplicationServices;
-            serviceProvider.GetService<MainScheduler>();
+            //var serviceProvider = app.ApplicationServices;
+            //serviceProvider.GetService<SasDbContext>();
+            //serviceProvider.GetService<MainScheduler>();
         }
     }
 }

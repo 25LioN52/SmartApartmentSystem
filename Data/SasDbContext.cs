@@ -8,10 +8,10 @@ namespace SmartApartmentSystem.Data
         public DbSet<Module> Modules { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=SasDb.db");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlite("Data Source=SasDb.db");
+        //}
 
         public SasDbContext(DbContextOptions options)
         : base(options)
@@ -31,6 +31,16 @@ namespace SmartApartmentSystem.Data
                 Id = 1,
                 Name = "Boiler",
                 ActualStatus = 0,
+                ExpectedStatus = 24,
+                DeviceId = 1,
+                IsActive = false,
+                IsDisabled = false
+            },
+            new Module
+            {
+                Id = 2,
+                Name = "Floor",
+                ActualStatus = 0,
                 ExpectedStatus = 0,
                 DeviceId = 1,
                 IsActive = false,
@@ -40,8 +50,8 @@ namespace SmartApartmentSystem.Data
             modelBuilder.Entity<Schedule>()
                 .HasKey(p => new { p.ModuleId, p.Day, p.Hour, p.Minutes });
 
-            modelBuilder.Entity<Schedule>().HasData(new Schedule { Day = 2, Hour = 8, Minutes = 30, ModuleId = 1, Status = 25 });
-            modelBuilder.Entity<Schedule>().HasData(new Schedule { Day = 2, Hour = 9, Minutes = 00, ModuleId = 1, Status = 20 });
+            //modelBuilder.Entity<Schedule>().HasData(new Schedule { Day = 2, Hour = 8, Minutes = 30, ModuleId = 1, Status = 25 });
+            //modelBuilder.Entity<Schedule>().HasData(new Schedule { Day = 2, Hour = 9, Minutes = 00, ModuleId = 1, Status = 20 });
         }
     }
 }

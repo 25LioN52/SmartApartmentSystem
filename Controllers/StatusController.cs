@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SmartApartmentSystem.Domain.Entity;
 using SmartApartmentSystem.Queries;
+using SmartApartmentSystem.Data;
+using System.Linq;
 
 namespace SmartApartmentSystem.Controllers
 {
@@ -13,16 +15,19 @@ namespace SmartApartmentSystem.Controllers
     public class StatusController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly SasDbContext _context;
 
-        public StatusController(IMediator mediator)
+        public StatusController(IMediator mediator, SasDbContext context)
         {
             _mediator = mediator;
+            _context = context;
         }
 
         [HttpGet]
         public ActionResult<string> GetStatuses()
         {
-            var result = $"{DateTime.Now.Hour} {DateTime.Now.Minute}";
+            var tr = _context.Modules.ToArray();
+            var result = $"{DateTime.Now.Hour} {DateTime.Now.Minute} {tr.FirstOrDefault()}";
 
             return Ok(result);
         }
