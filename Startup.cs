@@ -87,9 +87,8 @@ namespace SmartApartmentSystem
                 }
             });
 
-            //var serviceProvider = app.ApplicationServices;
-            //serviceProvider.GetService<SasDbContext>();
-            //serviceProvider.GetService<MainScheduler>();
+            var serviceProvider = app.ApplicationServices;
+            serviceProvider.GetService<MainScheduler>();
         }
     }
 }

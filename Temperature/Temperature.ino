@@ -16,16 +16,21 @@ int setTmp = 24; // переменная для заданного значен�
 #define VCC_PIN 4
 #define GR_PIN 3
 #define FLOOR_PIN 11
+#define WATER_RELAY_PIN 10
+#define WATER_IN_PIN 9
 //Объявим переменную для хранения состояния реле
 boolean relayStatus1 = LOW;
 boolean floorStatus = LOW;
+
+boolean waterInStatus = HIGH;
+boolean waterRelayStatus = HIGH;
 
 //Объявим переменные для задания задержки
 long previousMillis1 = 0;
 long interval1 = 1000; // интервал опроса датчиков температуры
 
 void setup () {
-  Wire.begin(0x10);                // join i2c bus with address #4
+  Wire.begin(0x10);                // join i2c bus with address #10
   Wire.onReceive(receiveEvent); // register event
   Wire.onRequest(requestEvent);
 
@@ -36,10 +41,13 @@ void setup () {
   pinMode(FLOOR_PIN, OUTPUT);
   pinMode(13, OUTPUT);
   pinMode(VCC_PIN, OUTPUT);
+  pinMode(WATER_IN_PIN, INPUT);
+  pinMode(WATER_RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, LOW);
   digitalWrite(13, LOW);
   digitalWrite(VCC_PIN, HIGH);
   digitalWrite(FLOOR_PIN, LOW);
+  digitalWrite(WATER_RELAY_PIN, HIGH);
 
   //Инициализируем термодатчик и установим разрешающую способность 12 бит (обычно она установлена по умолчанию, так что последнюю строчку можно опустить)
   sensors.begin();
@@ -50,7 +58,7 @@ void loop() {
   //Модуль опроса датчиков и получения сведений о температуре
   //Вызывается 1 раз в секунду
   unsigned long currentMillis1 = millis();
-  if (currentMillis1 < previousMillis1){
+  if (currentMillis1 < previousMillis1) {
     previousMillis1 = currentMillis1;
   }
   if (currentMillis1 - previousMillis1 > interval1) {
@@ -68,6 +76,8 @@ void loop() {
     Serial.println(temp1);
     Serial.println(setTmp);
     Serial.println(relayStatus1);
+
+    waterInStatus = digitalRead(WATER_IN_PIN);
   }
 
   //Проверка условия включения/выключения нагревателя
@@ -82,6 +92,11 @@ void loop() {
     digitalWrite(RELAY_PIN, LOW);
     digitalWrite(13, LOW);
   }
+
+  if (!waterInStatus && waterRelayStatus) {
+    waterRelayStatus = waterInStatus;
+    digitalWrite(WATER_RELAY_PIN, waterRelayStatus);
+  }
 }
 
 void receiveEvent()
@@ -90,13 +105,16 @@ void receiveEvent()
   byte result = Wire.read();
   if (type == 0) {
     setTmp = result;
-  } else if (type == 1){
-    if (result > 0){
+  } else if (type == 1) {
+    if (result > 0) {
       floorStatus = HIGH;
     } else {
       floorStatus = LOW;
     }
     digitalWrite(FLOOR_PIN, floorStatus);
+  } else if (type == 2) {
+    waterRelayStatus = result > 0;
+    digitalWrite(WATER_RELAY_PIN, waterRelayStatus);
   }
 
   Serial.print("Receive ");
