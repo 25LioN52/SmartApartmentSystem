@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Tab 1
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <!--<ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Tab 2</ion-title>
+        </ion-toolbar>
+    </ion-header>-->
+
+    <ion-card>
+        <ion-item>
+            <ion-icon name="thermometer-outline" color="danger" slot="start"></ion-icon>
+            <ion-label>{{actualTemperature}} C</ion-label>
+            <!--<ion-icon name="snow-outline" color="secondary" slot="end"></ion-icon>-->
+            <!--<ion-icon name="flame-outline" color="danger" slot="end"></ion-icon>-->
+            <ion-toggle slot="end" checked></ion-toggle>
+        </ion-item>
+
+        <ion-card-content>
+            <ion-item>
+                <ion-range min="16" max="28" step="1" snaps color="danger" [(ngModel)]="expectedTemperature" (ionChange)="tempChange()">
+                    <ion-label slot="end">{{expectedTemperature}}</ion-label>
+                </ion-range>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-item>
+            <ion-icon name="bonfire-outline" color="danger" slot="start"></ion-icon>
+            <ion-label>Warm Floor</ion-label>
+            <ion-toggle slot="end" checked [(ngModel)]="IsFloorOn" (ionChange)="floorChange()"></ion-toggle>
+        </ion-item>
+    </ion-card>
+    <ion-card>
+        <ion-item>
+            <ion-icon name="sunny-outline" color="warning" slot="start"></ion-icon>
+            <ion-label>Room 1</ion-label>
+            <ion-toggle slot="end" checked [(ngModel)]="isTrue"></ion-toggle>
+        </ion-item>
+    </ion-card>
+    <ion-card>
+        <ion-item>
+            <ion-icon name="sunny-outline" color="medium" slot="start"></ion-icon>
+            <ion-label>Room 2</ion-label>
+            <ion-toggle slot="end"></ion-toggle>
+        </ion-item>
+    </ion-card>
+    <ion-card>
+        <ion-item>
+            <ion-icon name="water-outline" color="primary" slot="start"></ion-icon>
+            <ion-label>Water valve</ion-label>
+            <ion-toggle slot="end" checked [(ngModel)]="IsWaterOn" (ionChange)="waterChange()"></ion-toggle>
+        </ion-item>
+    </ion-card>
+</ion-content>
