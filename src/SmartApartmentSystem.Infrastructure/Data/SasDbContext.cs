@@ -10,10 +10,10 @@ namespace SmartApartmentSystem.Infrastructure.Data
         public DbSet<ModuleActual> ModuleActuals { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=SasDb.db");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlite("Data Source=SasDb.db");
+        //}
         public SasDbContext()
         : base()
         {

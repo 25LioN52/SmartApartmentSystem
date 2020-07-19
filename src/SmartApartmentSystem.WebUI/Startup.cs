@@ -16,6 +16,7 @@ using SmartApartmentSystem.Infrastructure.Data;
 using SmartApartmentSystem.Application;
 using SmartApartmentSystem.Application.Jobs;
 using SmartApartmentSystem.Application.Devices.WaterTemperature.Queries;
+using SmartApartmentSystem.Application.History.Queries;
 
 namespace SmartApartmentSystem
 {
@@ -47,6 +48,7 @@ namespace SmartApartmentSystem
             services.AddMvc();
             
             services.AddMediatR(typeof(GetTempQuery).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(GetTemperatureHistoryQuery).GetTypeInfo().Assembly);
 
             services.AddDbContext<ISasDb, SasDbContext>(options =>
                   options.UseSqlite(dbConnection));
@@ -59,10 +61,6 @@ namespace SmartApartmentSystem
             });
 
             services.AddSingleton<MainScheduler>();
-
-            var optionsBuilder = new DbContextOptionsBuilder<SasDbContext>();
-            optionsBuilder.UseSqlite(dbConnection);
-            services.AddSingleton<ISasDb>(f => new SasDbContext(optionsBuilder.Options));
             services.AddSingleton<Listener>();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

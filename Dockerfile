@@ -35,4 +35,4 @@ ENTRYPOINT ["dotnet", "SmartApartmentSystem.API.dll"]
 
 #docker build "C:\Repos\SmartApartmentSystem" -t 25lion52/sas:latest
 #docker push 25lion52/sas
-#docker run -v /home/pi/sas/SasDb.db:/local-db/SasDb.db --privileged --restart unless-stopped -p 8700:80 -e TZ=Europe/Kiev 25lion52/sas
+#docker run -v /home/pi/sas:/local-db --privileged --restart unless-stopped -p 8700:80 -e TZ=Europe/Kiev 25lion52/sas

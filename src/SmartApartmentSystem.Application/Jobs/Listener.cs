@@ -1,34 +1,31 @@
 ﻿using SmartApartmentSystem.Application.Devices.WaterTemperature;
-using System;
 using SmartApartmentSystem.Domain.WaterTemperature;
-using SmartApartmentSystem.Domain.Entity;
-using SmartApartmentSystem.Domain.Extensions;
+using MediatR;
+using System;
+using SmartApartmentSystem.Application.History.Command;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SmartApartmentSystem.Application.Jobs
 {
     public class Listener
     {
-        private readonly ISasDb _sasDb;
+        private readonly IServiceProvider _serviceProvider;
 
-        public Listener(ISasDb sasDb, IWaterTemperatureDevice device)
+        public Listener(IWaterTemperatureDevice device, IServiceProvider serviceProvider)
         {
-            _sasDb = sasDb;
+            _serviceProvider = serviceProvider;
             device.ChannelStatusesChanged += Temperature_ChannelStatusesChanged;
         }
 
         private void Temperature_ChannelStatusesChanged(object sender, ChannelStatusesChangedEventArgs<WaterTempChannels> e)
         {
-            foreach(var status in e.ChannelStatuses)
+            var model = new UpdateActualStatusCommand
             {
-                _sasDb.ModuleActuals.Add(new ModuleActual
-                {
-                    ActualStatus = status.Value.ActualStatus,
-                    ChangeDate = DateTime.Now,
-                    IsActive = status.Value.IsActive,
-                    ModuleId = status.Key.ToGlobalType()
-                });
-            }
-            _sasDb.SaveChanges();
+                Model = e.ChannelStatuses
+            };
+            using var scope = _serviceProvider.CreateScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            _ = mediator.Send(model).Result;
         }
     }
 }
