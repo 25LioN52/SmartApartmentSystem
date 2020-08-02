@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
+import { SignalRService } from '../services/signal-r.service';
 
 @Component({
   selector: 'app-tab3',
@@ -18,7 +19,7 @@ export class Tab3Page implements OnInit {
     labels: string[];
     temperature: number[];
     floor: number[];
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private signalRService: SignalRService) {
         this.labels = ['12 am', '1 am', '2 am', '3 am', '4 am', '5 am',
             '6 am', '7 am', '8 am', '9 am', '10 am', '11 am',
             '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm',
@@ -26,6 +27,11 @@ export class Tab3Page implements OnInit {
     }
 
     ngOnInit() {
+        this.signalRService.onChanged.subscribe(() => {
+            this.ionViewDidEnter();
+        });
+        this.signalRService.startConnection();
+        this.signalRService.addTransferChartDataListener();
     }
 
     ionViewDidEnter() {

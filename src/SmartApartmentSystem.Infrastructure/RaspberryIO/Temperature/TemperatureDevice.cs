@@ -152,18 +152,11 @@ namespace SmartApartmentSystem.Infrastructure.RaspberryIO.Temperature
             try
             {
                 _device.Read(buffer);
-                _logger.LogInformation("Read buffer");
-
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    _logger.LogInformation("{i} part {rawStatus}", i, buffer[i]);
-                }
 
                 var statusChanged = new List<WaterTempChannels>();
                 for (var i = 0; i < CHANNELS_NUMBER; i++)
                 {
                     ushort rawStatus = BinaryPrimitives.ReadUInt16BigEndian(buffer.Slice(i * 2, 2));
-                    _logger.LogInformation("{i} part {rawStatus} ushort", i, rawStatus);
 
                     var newStatus = new ModuleStatus
                     {
@@ -181,6 +174,7 @@ namespace SmartApartmentSystem.Infrastructure.RaspberryIO.Temperature
 
                 if (statusChanged.Any())
                 {
+                    _logger.LogInformation("Status Changed");
                     OnChannelStatusesChanged(statusChanged);
                 }
             }

@@ -14,9 +14,9 @@ using SmartApartmentSystem.Infrastructure.RaspberryIO.Temperature;
 using SmartApartmentSystem.Application.Devices.WaterTemperature;
 using SmartApartmentSystem.Infrastructure.Data;
 using SmartApartmentSystem.Application;
-using SmartApartmentSystem.Application.Jobs;
 using SmartApartmentSystem.Application.Devices.WaterTemperature.Queries;
 using SmartApartmentSystem.Application.History.Queries;
+using SmartApartmentSystem.API.Infrastructure;
 
 namespace SmartApartmentSystem
 {
@@ -46,7 +46,11 @@ namespace SmartApartmentSystem
                 services.AddSingleton<IWaterTemperatureDevice, TemperatureDevice>();
             }
             services.AddMvc();
-            
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+            });
+
             services.AddMediatR(typeof(GetTempQuery).GetTypeInfo().Assembly);
             services.AddMediatR(typeof(GetTemperatureHistoryQuery).GetTypeInfo().Assembly);
 
@@ -88,6 +92,7 @@ namespace SmartApartmentSystem
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<SignalRHub>("/signalr");
             });
             app.UseSpa(spa =>
             {
